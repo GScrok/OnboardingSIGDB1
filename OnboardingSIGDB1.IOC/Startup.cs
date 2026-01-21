@@ -20,18 +20,21 @@ namespace OnboardingSIGDB1.IOC
             
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IRoleService, RoleService>();
         }
 
         public static void ConfigureRepositories(this IServiceCollection services)
         {
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
         }
         
         public static void ConfigureMappers(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(CompanyProfile));
             services.AddAutoMapper(typeof(EmployeeProfile));
+            services.AddAutoMapper(typeof(RoleProfile));
         }
     }
 }
