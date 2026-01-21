@@ -7,4 +7,5 @@ public class EmployeeDto
     public string Cpf { get; set; }
     public DateTime? HiringDate { get; set; }
     public int CompanyId { get; set; }
+    public string? LastRole { get; set; }
 }

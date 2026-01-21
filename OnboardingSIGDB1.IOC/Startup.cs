@@ -28,6 +28,7 @@ namespace OnboardingSIGDB1.IOC
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IEmployeeRoleRepository, EmployeeRoleRepository>();
         }
         
         public static void ConfigureMappers(this IServiceCollection services)

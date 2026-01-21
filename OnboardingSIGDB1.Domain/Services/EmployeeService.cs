@@ -13,27 +13,34 @@ namespace OnboardingSIGDB1.Domain.Services;
 
 public class EmployeeService : BaseService, IEmployeeService
 {
-    private readonly IEmployeeRepository _employeeRepository;
-    private readonly ICompanyRepository _companyRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _uow;
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly ICompanyRepository _companyRepository;
+    private readonly IRoleRepository _roleRepository;
+    private readonly IEmployeeRoleRepository _employeeRoleRepository;
 
-    public EmployeeService(IEmployeeRepository employeeRepository,
-        ICompanyRepository companyRepository,
-        IMapper mapper,
+    public EmployeeService(IUnitOfWork uow,
         INotificator notificator,
-        IUnitOfWork uow) : base(notificator)
+        IMapper mapper,
+        IEmployeeRepository employeeRepository,
+        ICompanyRepository companyRepository,
+        IRoleRepository roleRepository,
+        IEmployeeRoleRepository employeeRoleRepository
+    ) : base(notificator)
     {
-        _employeeRepository = employeeRepository;
-        _companyRepository = companyRepository;
         _mapper = mapper;
         _uow = uow;
+        _employeeRepository = employeeRepository;
+        _companyRepository = companyRepository;
+        _roleRepository = roleRepository;
+        _employeeRoleRepository =  employeeRoleRepository;
     }
 
     public async Task Add(EmployeeDto employeeDto)
     {
         if (!ExecuteValidation(new EmployeeDtoValidator(), employeeDto)) return;
-        
+
         if (!await ExistsCompany(employeeDto.CompanyId)) return;
 
         if (await IsCpfAlreadyRegistered(employeeDto.Cpf)) return;
@@ -127,7 +134,7 @@ public class EmployeeService : BaseService, IEmployeeService
     {
         _employeeRepository?.Dispose();
     }
-    
+
     private async Task<bool> ExistsCompany(int companyId)
     {
         Company? companyExists = await _companyRepository.GetById(companyId);
@@ -139,7 +146,7 @@ public class EmployeeService : BaseService, IEmployeeService
 
         return true;
     }
-    
+
     async Task<bool> IsCpfAlreadyRegistered(string cpf)
     {
         string cpfClean = StringUtils.RemoveMask(cpf);
@@ -153,4 +160,37 @@ public class EmployeeService : BaseService, IEmployeeService
 
         return false;
     }
-}
+
+    public async Task LinkRole(int employeeId, EmployeeRoleDto dto)
+    {
+        Employee? employee = await _employeeRepository.GetById(employeeId);
+        if (employee == null)
+        {
+            Notify("Funcionário não encontrado.");
+            return;
+        }
+
+        Role? role = await _roleRepository.GetById(dto.RoleId);
+        if (role == null)
+        {
+            Notify("Cargo não encontrado.");
+            return;
+        }
+
+        EmployeeRole? existingLink = await _employeeRoleRepository.GetByKeys(employeeId, dto.RoleId);
+        if (existingLink != null)
+        {
+            Notify("Este funcionário já possui este cargo vinculado.");
+            return;
+        }
+
+        EmployeeRole employeeRole = new EmployeeRole(employeeId, dto.RoleId, dto.StartDate);
+
+        await _employeeRoleRepository.Add(employeeRole);
+
+        if (!await _uow.Commit())
+        {
+            Notify("Erro ao vincular cargo ao funcionário.");
+        }
+    }
+}   

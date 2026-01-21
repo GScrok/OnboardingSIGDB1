@@ -19,12 +19,12 @@ public abstract class GenericRepository<T> : IGenericRepository<T> where T : cla
         await DbSet.AddAsync(entity);
     }
 
-    public async Task<T> GetById(int id)
+    public virtual async Task<T> GetById(int id)
     {
         return await DbSet.FindAsync(id);
     }
 
-    public async Task<List<T>> GetAll()
+    public virtual async Task<List<T>> GetAll()
     {
         return await DbSet.ToListAsync();
     }

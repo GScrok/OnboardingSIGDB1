@@ -13,6 +13,8 @@ public class EmployeeRepository : GenericRepository<Employee>, IEmployeeReposito
     public async Task<List<Employee>> GetByFilters(EmployeeFilter filter)
     {
         IQueryable<Employee> query = DbSet.AsQueryable();
+        
+        query = query.Include(e => e.EmployeeRoles).ThenInclude(er => er.Role);
 
         if (!string.IsNullOrEmpty(filter.Name))
             query = query.Where(e => e.Name.Contains(filter.Name));
@@ -37,5 +39,23 @@ public class EmployeeRepository : GenericRepository<Employee>, IEmployeeReposito
     public async Task<bool> HasEmployeeInCompany(int companyId)
     {
         return await DbSet.AsNoTracking().AnyAsync(e => e.CompanyId == companyId);
+    }
+    
+    public override async Task<Employee?> GetById(int id)
+    {
+        return await DbSet
+            .AsNoTracking()
+            .Include(e => e.EmployeeRoles)
+            .ThenInclude(er => er.Role)
+            .FirstOrDefaultAsync(e => e.Id == id);
+    }
+
+    public override async Task<List<Employee>> GetAll()
+    {
+        return await DbSet
+            .AsNoTracking()
+            .Include(e => e.EmployeeRoles)
+            .ThenInclude(er => er.Role)
+            .ToListAsync();
     }
 }

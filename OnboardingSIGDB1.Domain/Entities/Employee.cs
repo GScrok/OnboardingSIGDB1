@@ -10,6 +10,8 @@ public class Employee : BaseEntity
         Cpf = cpf;
         HiringDate = hiringDate;
         CompanyId = companyId;
+        
+        EmployeeRoles = new List<EmployeeRole>();
     }
 
     public string Name { get; set; }
@@ -18,4 +20,5 @@ public class Employee : BaseEntity
     public int? CompanyId { get; private set; }
     
     public virtual Company Company { get; set; }
+    public virtual ICollection<EmployeeRole> EmployeeRoles { get; set; }
 }

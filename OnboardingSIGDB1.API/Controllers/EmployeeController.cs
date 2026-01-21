@@ -85,4 +85,14 @@ public class EmployeesController : MainController
         await _employeeService.Remove(id);
         return CustomResponse();
     }
+    
+    [HttpPost("{id:int}/cargos")]
+    public async Task<IActionResult> AddRole(int id, [FromBody] EmployeeRoleDto dto)
+    {
+        if (!ModelState.IsValid) return NotifyErrorModelInvalid(ModelState);
+
+        await _employeeService.LinkRole(id, dto);
+
+        return CustomResponse();
+    }
 }
