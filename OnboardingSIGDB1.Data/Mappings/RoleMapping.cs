@@ -13,8 +13,7 @@ public class RoleMapping : IEntityTypeConfiguration<Role>
         builder.HasKey(r => r.Id);
 
         builder.Property(r => r.Description)
-            .HasColumnName("Descricao")
-            .HasColumnType("nvarchar(250)")
+            .HasMaxLength(250)
             .IsRequired();
     }
 }

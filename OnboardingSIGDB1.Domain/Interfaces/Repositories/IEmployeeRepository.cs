@@ -8,4 +8,5 @@ public interface IEmployeeRepository : IGenericRepository<Employee>
 {
     Task<List<Employee>> GetByFilters(EmployeeFilter filter);
     Task<Employee?> GetByCpf(string cpf);
+    Task<bool> HasEmployeeInCompany(int companyId);
 }

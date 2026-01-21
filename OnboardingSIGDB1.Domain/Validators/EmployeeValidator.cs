@@ -19,5 +19,8 @@ public class EmployeeDtoValidator : AbstractValidator<EmployeeDto>
         RuleFor(c => c.HiringDate)
             .GreaterThan(DateTime.MinValue).When(c => c.HiringDate.HasValue)
             .WithMessage("Data de Contratação inválida.");
+        
+        RuleFor(c => c.CompanyId)
+            .GreaterThan(0).WithMessage("O ID da Empresa é obrigatório.");
     }
 }

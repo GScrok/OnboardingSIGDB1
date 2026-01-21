@@ -14,15 +14,18 @@ namespace OnboardingSIGDB1.Domain.Services
     public class CompanyService : BaseService, ICompanyService
     {
         private readonly ICompanyRepository _companyRepository;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
 
-        public CompanyService(ICompanyRepository companyRepository, 
-                              IMapper mapper, 
-                              INotificator notificator,
-                              IUnitOfWork uow) : base(notificator)
+        public CompanyService(ICompanyRepository companyRepository,
+            IEmployeeRepository employeeRepository,
+            IMapper mapper,
+            INotificator notificator,
+            IUnitOfWork uow) : base(notificator)
         {
             _companyRepository = companyRepository;
+            _employeeRepository = employeeRepository;
             _mapper = mapper;
             _uow = uow;
         }
@@ -68,12 +71,12 @@ namespace OnboardingSIGDB1.Domain.Services
             string cleanCnpj = StringUtils.RemoveMask(companyDto.Cnpj);
             if (existingCompany.Cnpj != cleanCnpj)
             {
-                 Company? companyWithCnpj = await _companyRepository.GetByCnpj(cleanCnpj);
-                 if (companyWithCnpj != null)
-                 {
-                     Notify("Já existe uma outra empresa cadastrada com este CNPJ.");
-                     return;
-                 }
+                Company? companyWithCnpj = await _companyRepository.GetByCnpj(cleanCnpj);
+                if (companyWithCnpj != null)
+                {
+                    Notify("Já existe uma outra empresa cadastrada com este CNPJ.");
+                    return;
+                }
             }
 
             existingCompany.Name = companyDto.Name;
@@ -97,6 +100,12 @@ namespace OnboardingSIGDB1.Domain.Services
                 return;
             }
 
+            if (await _employeeRepository.HasEmployeeInCompany(id))
+            {
+                Notify("Não é possível excluir esta empresa pois ela possui funcionários vinculados.");
+                return;
+            }
+            
             _companyRepository.Remove(company);
 
             if (!await _uow.Commit())
@@ -119,8 +128,8 @@ namespace OnboardingSIGDB1.Domain.Services
 
         public async Task<IEnumerable<CompanyDto>> GetByFilters(CompanyFilter filter)
         {
-            if(!ExecuteValidation(new CompanyFilterValidator(), filter)) return null;
-            
+            if (!ExecuteValidation(new CompanyFilterValidator(), filter)) return null;
+
             if (!string.IsNullOrEmpty(filter.Cnpj))
             {
                 filter.Cnpj = StringUtils.RemoveMask(filter.Cnpj);

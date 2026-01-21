@@ -22,5 +22,10 @@ public class EmployeeMapping : IEntityTypeConfiguration<Employee>
         
         builder.Property(e => e.HiringDate)
             .IsRequired(false);
+        
+        builder.HasOne(e => e.Company)
+            .WithMany()
+            .HasForeignKey(e => e.CompanyId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

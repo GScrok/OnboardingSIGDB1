@@ -33,4 +33,9 @@ public class EmployeeRepository : GenericRepository<Employee>, IEmployeeReposito
     {
         return await DbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Cpf == cpf);
     }
+    
+    public async Task<bool> HasEmployeeInCompany(int companyId)
+    {
+        return await DbSet.AsNoTracking().AnyAsync(e => e.CompanyId == companyId);
+    }
 }

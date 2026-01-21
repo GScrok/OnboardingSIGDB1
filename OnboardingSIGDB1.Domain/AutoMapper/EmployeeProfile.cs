@@ -15,7 +15,8 @@ public class EmployeeProfile : Profile
             .ConstructUsing(d => new Employee(
                 d.Name,
                 StringUtils.RemoveMask(d.Cpf),
-                d.HiringDate
+                d.HiringDate,
+                d.CompanyId
             ))
             .ForMember(dest => dest.Cpf, opt => opt.Ignore());
     }
