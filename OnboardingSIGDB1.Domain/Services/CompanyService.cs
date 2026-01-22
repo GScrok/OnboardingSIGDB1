@@ -79,9 +79,7 @@ namespace OnboardingSIGDB1.Domain.Services
                 }
             }
 
-            existingCompany.Name = companyDto.Name;
-            existingCompany.Cnpj = cleanCnpj;
-            existingCompany.FoundationDate = companyDto.FoundationDate;
+            _mapper.Map(companyDto, existingCompany);
 
             _companyRepository.Update(existingCompany);
 

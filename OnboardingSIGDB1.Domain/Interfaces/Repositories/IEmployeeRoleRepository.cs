@@ -6,4 +6,5 @@ public interface IEmployeeRoleRepository : IDisposable
 {
     Task Add(EmployeeRole employeeRole);
     Task<EmployeeRole> GetByKeys(int employeeId, int roleId);
+    Task<List<EmployeeRole>> GetListByEmployeeId(int employeeId);
 }

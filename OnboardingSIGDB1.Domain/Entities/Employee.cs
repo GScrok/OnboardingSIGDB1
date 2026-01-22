@@ -17,7 +17,7 @@ public class Employee : BaseEntity
     public string Name { get; set; }
     public string Cpf { get; set; }
     public DateTime? HiringDate { get; set; }
-    public int? CompanyId { get; private set; }
+    public int? CompanyId { get; set; }
     
     public virtual Company Company { get; set; }
     public virtual ICollection<EmployeeRole> EmployeeRoles { get; set; }

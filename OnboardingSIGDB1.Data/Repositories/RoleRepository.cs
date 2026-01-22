@@ -10,15 +10,27 @@ public class RoleRepository : GenericRepository<Role>, IRoleRepository
 {
     public RoleRepository(DataContext context) : base(context) { }
 
-    public async Task<List<Role>> GetByDescription(RoleFilter filter)
+    public async Task<List<Role>> GetByDescription(string description)
     {
         IQueryable<Role> query = DbSet.AsQueryable();
 
-        if (!string.IsNullOrEmpty(filter.Description))
+        if (!string.IsNullOrEmpty(description))
         {
-            query = query.Where(r => r.Description.Contains(filter.Description));
+            query = query.Where(r => r.Description.Contains(description));
         }
 
         return await query.ToListAsync();
+    }
+    
+    public async Task<Role> GetByExactDescription(string description)
+    {
+        IQueryable<Role> query = DbSet.AsQueryable();
+
+        if (!string.IsNullOrEmpty(description))
+        {
+            query = query.Where(r => r.Description.Equals(description));
+        }
+
+        return await query.FirstOrDefaultAsync();
     }
 }

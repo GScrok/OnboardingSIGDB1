@@ -18,5 +18,9 @@ public class CompanyProfile : Profile
                 d.FoundationDate
             ))
             .ForMember(dest => dest.Cnpj, opt => opt.Ignore());
+        
+        CreateMap<CompanyUpdateDto, Company>()
+            .ForMember(dest => dest.Cnpj, opt => 
+                opt.MapFrom(src => StringUtils.RemoveMask(src.Cnpj)));
     }
 }

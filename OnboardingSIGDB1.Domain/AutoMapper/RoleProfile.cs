@@ -14,5 +14,7 @@ public class RoleProfile : Profile
             .ConstructUsing(d => new Role(
                 d.Description
             ));
+
+        CreateMap<RoleUpdateDto, Role>();
     }
 }

@@ -22,7 +22,11 @@ builder.Services.ConfigureMappers();
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.EnableAnnotations(); 
+});
 
 var app = builder.Build();
 

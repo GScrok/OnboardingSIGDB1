@@ -29,4 +29,9 @@ public class EmployeeRoleRepository : IEmployeeRoleRepository
     {
         _context?.Dispose();
     }
+
+    public async Task<List<EmployeeRole>> GetListByEmployeeId(int employeeId)
+    {
+        return await _dbSet.Include(x => x.Role).Where(e => e.EmployeeId == employeeId).OrderByDescending(x => x.StartDate).ToListAsync();
+    }
 }

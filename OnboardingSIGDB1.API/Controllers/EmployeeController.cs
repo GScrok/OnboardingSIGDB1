@@ -93,6 +93,16 @@ public class EmployeesController : MainController
 
         await _employeeService.LinkRole(id, dto);
 
-        return CustomResponse();
+        return CustomResponse(dto);
     }
+
+    [HttpGet("{id:int}/cargos")]
+    public async Task<IActionResult> HistoryEmployeeRole(int id)
+    {
+        List<EmployeeRoleDto> employeeRoles = await _employeeService.GetEmployeeRoles(id);
+        
+        return CustomResponse(employeeRoles);
+    }
+    
+    
 }

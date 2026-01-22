@@ -41,7 +41,10 @@ public class EmployeeService : BaseService, IEmployeeService
     {
         if (!ExecuteValidation(new EmployeeDtoValidator(), employeeDto)) return;
 
-        if (!await ExistsCompany(employeeDto.CompanyId)) return;
+        if (employeeDto.CompanyId != null)
+        {
+            if (!await ExistsCompany(employeeDto.CompanyId.Value)) return;
+        }
 
         if (await IsCpfAlreadyRegistered(employeeDto.Cpf)) return;
 
@@ -78,9 +81,13 @@ public class EmployeeService : BaseService, IEmployeeService
             if (await IsCpfAlreadyRegistered(employeeDto.Cpf)) return;
         }
 
-        existingEmployee.Name = employeeDto.Name;
-        existingEmployee.Cpf = cpfClean;
-        existingEmployee.HiringDate = employeeDto.HiringDate;
+        if (existingEmployee.CompanyId != null && existingEmployee.CompanyId != employeeDto.CompanyId)
+        {
+            Notify("Não é permitido alterar o vínculo de funcionário com empresa já registrada.");
+            return;
+        }
+        
+        _mapper.Map(employeeDto, existingEmployee);
 
         _employeeRepository.Update(existingEmployee);
 
@@ -177,6 +184,12 @@ public class EmployeeService : BaseService, IEmployeeService
             return;
         }
 
+        if (employee.CompanyId == null)
+        {
+            Notify("Este funcionário não está vinculado a uma empresa.");
+            return;
+        }
+        
         EmployeeRole? existingLink = await _employeeRoleRepository.GetByKeys(employeeId, dto.RoleId);
         if (existingLink != null)
         {
@@ -192,5 +205,29 @@ public class EmployeeService : BaseService, IEmployeeService
         {
             Notify("Erro ao vincular cargo ao funcionário.");
         }
+    }
+
+    public async Task<List<EmployeeRoleDto>> GetEmployeeRoles(int employeeId)
+    {
+        if (employeeId == null)
+        {
+            Notify("ID inválido.");
+            return null;
+        }
+
+        Employee? existingEmployee = await _employeeRepository.GetById(employeeId);
+        if (existingEmployee == null)
+        {
+            Notify("Funcionário não encontrado.");
+            return null;
+        }
+
+        List<EmployeeRoleDto> employeeRolesDto = new();
+        
+        List<EmployeeRole> employeeRoles = await  _employeeRoleRepository.GetListByEmployeeId(employeeId);
+
+        _mapper.Map(employeeRoles, employeeRolesDto);
+
+        return employeeRolesDto;
     }
 }   

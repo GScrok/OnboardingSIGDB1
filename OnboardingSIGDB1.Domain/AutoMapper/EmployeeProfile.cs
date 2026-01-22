@@ -25,5 +25,9 @@ public class EmployeeProfile : Profile
                 d.CompanyId
             ))
             .ForMember(dest => dest.Cpf, opt => opt.Ignore());
+        
+        CreateMap<EmployeeUpdateDto, Employee>()
+            .ForMember(dest => dest.Cpf, opt => 
+                opt.MapFrom(src => StringUtils.RemoveMask(src.Cpf)));
     }
 }

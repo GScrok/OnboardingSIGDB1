@@ -6,5 +6,7 @@ namespace OnboardingSIGDB1.Domain.Interfaces.Repositories;
 
 public interface IRoleRepository : IGenericRepository<Role>
 {
-    Task<List<Role>> GetByDescription(RoleFilter filter);
+    Task<List<Role>> GetByDescription(string description);
+
+    Task<Role> GetByExactDescription(string description);
 }

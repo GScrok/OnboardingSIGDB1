@@ -12,4 +12,5 @@ public interface IEmployeeService : IDisposable
     Task<EmployeeDto> GetById(int id);
     Task<IEnumerable<EmployeeDto>> GetByFilters(EmployeeFilter filter);
     Task LinkRole(int employeeId, EmployeeRoleDto dto);
+    Task<List<EmployeeRoleDto>> GetEmployeeRoles(int employeeId);
 }
