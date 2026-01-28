@@ -137,11 +137,6 @@ public class EmployeeService : BaseService, IEmployeeService
         return _mapper.Map<IEnumerable<EmployeeDto>>(list);
     }
 
-    public void Dispose()
-    {
-        _employeeRepository?.Dispose();
-    }
-
     private async Task<bool> ExistsCompany(int companyId)
     {
         Company? companyExists = await _companyRepository.GetById(companyId);

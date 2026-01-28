@@ -3,7 +3,7 @@ using OnboardingSIGDB1.Domain.Filters;
 
 namespace OnboardingSIGDB1.Domain.Interfaces.Services;
 
-public interface IRoleService : IDisposable
+public interface IRoleService
 {
     Task Add(RoleDto roleDto);
     Task Update(int id, RoleUpdateDto roleDto);

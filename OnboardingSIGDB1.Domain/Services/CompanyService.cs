@@ -136,10 +136,5 @@ namespace OnboardingSIGDB1.Domain.Services
             List<Company> companies = await _companyRepository.GetByFilters(filter);
             return _mapper.Map<IEnumerable<CompanyDto>>(companies);
         }
-
-        public void Dispose()
-        {
-            _companyRepository?.Dispose();
-        }
     }
 }

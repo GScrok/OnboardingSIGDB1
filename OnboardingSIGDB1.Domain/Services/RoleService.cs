@@ -116,9 +116,4 @@ public class RoleService : BaseService, IRoleService
 
         return _mapper.Map<IEnumerable<RoleDto>>(list);
     }
-
-    public void Dispose()
-    {
-        _roleRepository?.Dispose();
-    }
 }

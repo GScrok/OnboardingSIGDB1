@@ -3,7 +3,7 @@ using OnboardingSIGDB1.Domain.Filters;
 
 namespace OnboardingSIGDB1.Domain.Interfaces.Services
 {
-    public interface ICompanyService : IDisposable
+    public interface ICompanyService
     {
         Task Add(CompanyDto companyDto);
         Task Update(int id, CompanyUpdateDto companyDto);
