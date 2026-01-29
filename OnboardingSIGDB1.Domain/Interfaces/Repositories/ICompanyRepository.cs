@@ -6,6 +6,5 @@ namespace OnboardingSIGDB1.Domain.Interfaces.Repositories;
 
 public interface ICompanyRepository : IGenericRepository<Company>
 {
-    Task<List<Company>> GetByFilters(CompanyFilter filter);
     Task<Company> GetByCnpj(string cnpj);
 }

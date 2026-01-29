@@ -4,6 +4,7 @@ using OnboardingSIGDB1.Domain.Entities;
 using OnboardingSIGDB1.Domain.Filters;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Interfaces.Repositories;
+using OnboardingSIGDB1.Domain.Interfaces.Repositories.ReadRepositories;
 using OnboardingSIGDB1.Domain.Interfaces.Services;
 using OnboardingSIGDB1.Domain.Services.Base;
 using OnboardingSIGDB1.Domain.Utils;
@@ -14,17 +15,20 @@ namespace OnboardingSIGDB1.Domain.Services
     public class CompanyService : BaseService, ICompanyService
     {
         private readonly ICompanyRepository _companyRepository;
+        private readonly ICompanyReadRepository _companyReadRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
 
         public CompanyService(ICompanyRepository companyRepository,
+            ICompanyReadRepository companyReadRepository,
             IEmployeeRepository employeeRepository,
             IMapper mapper,
             INotificator notificator,
             IUnitOfWork uow) : base(notificator)
         {
             _companyRepository = companyRepository;
+            _companyReadRepository = companyReadRepository;
             _employeeRepository = employeeRepository;
             _mapper = mapper;
             _uow = uow;
@@ -114,14 +118,12 @@ namespace OnboardingSIGDB1.Domain.Services
 
         public async Task<IEnumerable<CompanyDto>> GetAll()
         {
-            List<Company> companies = await _companyRepository.GetAll();
-            return _mapper.Map<IEnumerable<CompanyDto>>(companies);
+            return await _companyReadRepository.GetAll();
         }
 
         public async Task<CompanyDto> GetById(int id)
         {
-            Company company = await _companyRepository.GetById(id);
-            return _mapper.Map<CompanyDto>(company);
+            return await _companyReadRepository.GetById(id);
         }
 
         public async Task<IEnumerable<CompanyDto>> GetByFilters(CompanyFilter filter)
@@ -133,8 +135,7 @@ namespace OnboardingSIGDB1.Domain.Services
                 filter.Cnpj = StringUtils.RemoveMask(filter.Cnpj);
             }
 
-            List<Company> companies = await _companyRepository.GetByFilters(filter);
-            return _mapper.Map<IEnumerable<CompanyDto>>(companies);
+            return await _companyReadRepository.GetByFilters(filter);
         }
     }
 }

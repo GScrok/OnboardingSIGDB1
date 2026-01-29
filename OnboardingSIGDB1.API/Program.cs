@@ -5,8 +5,7 @@ using OnboardingSIGDB1.IOC;
 var builder = WebApplication.CreateBuilder(args);
 
 // <---- Infrastructure ----> 
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.InitializeServices(builder.Configuration);
 
 builder.Services.ConfigureRepositories();
 // <------------------------> 

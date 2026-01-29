@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.Data", "On
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.IOC", "OnboardingSIGDB1.IOC\OnboardingSIGDB1.IOC.csproj", "{02773FD5-8632-4077-BDAC-A4C1E6F8ABE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.Query", "OnboardingSIGDB1.Query\OnboardingSIGDB1.Query.csproj", "{50A9FFF1-D66E-4F8E-BD46-2E57F0599F42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{02773FD5-8632-4077-BDAC-A4C1E6F8ABE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02773FD5-8632-4077-BDAC-A4C1E6F8ABE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02773FD5-8632-4077-BDAC-A4C1E6F8ABE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50A9FFF1-D66E-4F8E-BD46-2E57F0599F42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A9FFF1-D66E-4F8E-BD46-2E57F0599F42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A9FFF1-D66E-4F8E-BD46-2E57F0599F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A9FFF1-D66E-4F8E-BD46-2E57F0599F42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

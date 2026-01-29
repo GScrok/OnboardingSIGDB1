@@ -4,6 +4,7 @@ using OnboardingSIGDB1.Domain.Entities;
 using OnboardingSIGDB1.Domain.Filters;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Interfaces.Repositories;
+using OnboardingSIGDB1.Domain.Interfaces.Repositories.ReadRepositories;
 using OnboardingSIGDB1.Domain.Interfaces.Services;
 using OnboardingSIGDB1.Domain.Services.Base;
 using OnboardingSIGDB1.Domain.Utils;
@@ -16,6 +17,7 @@ public class EmployeeService : BaseService, IEmployeeService
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _uow;
     private readonly IEmployeeRepository _employeeRepository;
+    private readonly IEmployeeReadRepository _employeeReadRepository;
     private readonly ICompanyRepository _companyRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly IEmployeeRoleRepository _employeeRoleRepository;
@@ -24,6 +26,7 @@ public class EmployeeService : BaseService, IEmployeeService
         INotificator notificator,
         IMapper mapper,
         IEmployeeRepository employeeRepository,
+        IEmployeeReadRepository employeeReadRepository,
         ICompanyRepository companyRepository,
         IRoleRepository roleRepository,
         IEmployeeRoleRepository employeeRoleRepository
@@ -32,6 +35,7 @@ public class EmployeeService : BaseService, IEmployeeService
         _mapper = mapper;
         _uow = uow;
         _employeeRepository = employeeRepository;
+        _employeeReadRepository = employeeReadRepository;
         _companyRepository = companyRepository;
         _roleRepository = roleRepository;
         _employeeRoleRepository =  employeeRoleRepository;
@@ -116,14 +120,12 @@ public class EmployeeService : BaseService, IEmployeeService
 
     public async Task<IEnumerable<EmployeeDto>> GetAll()
     {
-        List<Employee> list = await _employeeRepository.GetAll();
-        return _mapper.Map<IEnumerable<EmployeeDto>>(list);
+        return await _employeeReadRepository.GetAll();
     }
 
     public async Task<EmployeeDto> GetById(int id)
     {
-        Employee entity = await _employeeRepository.GetById(id);
-        return _mapper.Map<EmployeeDto>(entity);
+        return await _employeeReadRepository.GetById(id);
     }
 
     public async Task<IEnumerable<EmployeeDto>> GetByFilters(EmployeeFilter filter)
@@ -133,8 +135,7 @@ public class EmployeeService : BaseService, IEmployeeService
             filter.Cpf = StringUtils.RemoveMask(filter.Cpf);
         }
 
-        List<Employee> list = await _employeeRepository.GetByFilters(filter);
-        return _mapper.Map<IEnumerable<EmployeeDto>>(list);
+        return await _employeeReadRepository.GetByFilters(filter);
     }
 
     private async Task<bool> ExistsCompany(int companyId)

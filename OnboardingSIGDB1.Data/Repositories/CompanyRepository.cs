@@ -12,33 +12,6 @@ public class CompanyRepository : GenericRepository<Company>, ICompanyRepository
     {
     }
 
-    public async Task<List<Company>> GetByFilters(CompanyFilter filter)
-    {
-        var query = DbSet.AsQueryable();
-
-        if (!string.IsNullOrEmpty(filter.Name))
-        {
-            query = query.Where(c => c.Name.Contains(filter.Name));
-        }
-
-        if (!string.IsNullOrEmpty(filter.Cnpj))
-        {
-            query = query.Where(c => c.Cnpj == filter.Cnpj);
-        }
-
-        if (filter.StartDate.HasValue)
-        {
-            query = query.Where(c => c.FoundationDate >= filter.StartDate.Value);
-        }
-
-        if (filter.EndDate.HasValue)
-        {
-            query = query.Where(c => c.FoundationDate <= filter.EndDate.Value);
-        }
-
-        return await query.ToListAsync();
-    }
-
     public async Task<Company> GetByCnpj(string cnpj)
     {
         return await DbSet.AsNoTracking().FirstOrDefaultAsync(c => c.Cnpj == cnpj);
